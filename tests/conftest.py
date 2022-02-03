@@ -1,12 +1,15 @@
-import json
 import functools
+import json
 import os
 import sys
+from typing import Callable
 
 import pytest
 from flask import Flask
 
 # Set up the path to import from `shorty`.
+from flask.testing import FlaskClient
+
 root = os.path.join(os.path.dirname(__file__))
 package = os.path.join(root, '..')
 sys.path.insert(0, os.path.abspath(package))
@@ -23,17 +26,16 @@ class TestResponseClass(Flask.response_class):
 Flask.response_class = TestResponseClass
 
 
-def humanize_werkzeug_client(client_method):
-    """Wraps a `werkzeug` client method (the client provided by `Flask`) to make
-    it easier to use in tests.
-
+def humanize_werkzeug_client(client_method) -> Callable:
     """
+    Wraps a `werkzeug` client method (the client provided by `Flask`) to make it easier to use in tests.
+    """
+
     @functools.wraps(client_method)
-    def wrapper(url, **kwargs):
+    def wrapper(url: str, **kwargs):
         # Always set the content type to `application/json`.
-        kwargs.setdefault('headers', {}).update({
-            'content-type': 'application/json'
-        })
+        headers = kwargs.setdefault('headers', {})
+        headers['content-type'] = 'application/json'
 
         # If data is present then make sure it is json encoded.
         if 'data' in kwargs:
@@ -49,7 +51,7 @@ def humanize_werkzeug_client(client_method):
 
 
 @pytest.fixture(scope='session', autouse=True)
-def app(request):
+def app(request) -> Flask:
     app = create_app({
         'TESTING': True
     })
@@ -58,18 +60,16 @@ def app(request):
     ctx = app.app_context()
     ctx.push()
 
-    def teardown():
-        ctx.pop()
+    request.addfinalizer(ctx.pop)
 
-    request.addfinalizer(teardown)
     return app
 
 
 @pytest.fixture(scope='function')
-def client(app, request):
+def client(app, request) -> FlaskClient:
     return app.test_client()
 
 
-@pytest.fixture(scope='function')
+@pytest.fixture
 def get(client):
     return humanize_werkzeug_client(client.get)

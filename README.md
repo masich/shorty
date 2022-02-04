@@ -81,13 +81,19 @@ We will not use any of this code for any of Plum's applications.
 Running guide
 -------------
 
-1. Setup environment variables.
+1. Install project requirements.
+
+```shell
+pip install -r requirements.txt
+```
+
+2. Setup environment variables.
 
 | variable name                         | type   | required | default                      | description                        |
 |---------------------------------------|--------|----------|------------------------------|------------------------------------|
-| BITLY_API_KEY                         | string | Y        |                              | Bitly service API key.             |
+| SHORTY_BITLY_API_KEY                  | string | Y        |                              | Bitly service API key.             |
 | SHORTY_BITLY_GROUP_GUID               | string | Y        |                              | Bitly group GUID for shortening.   |
-| BITLY_URL                             | string | N        | https://api-ssl.bitly.com/v4 | Bitly service base URL.            |
+| SHORTY_BITLY_URL                      | string | N        | https://api-ssl.bitly.com/v4 | Bitly service base URL.            |
 | SHORTY_BITLY_REQUEST_TIMEOUT_SECONDS  | string | N        | 1.0                          | Bitly service request timeout.     |
 | SHORTY_TINYURL_URL                    | string | N        | https://tinyurl.com          | Tinyurl base url.                  |
 | SHORTY_TINYURL_REQUST_TIMEOUT_SECONDS | string | N        | 1.0                          | Tinyurl request timeout.           |

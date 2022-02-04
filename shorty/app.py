@@ -2,6 +2,7 @@ import logging
 from typing import Any, Mapping
 
 from dotenv import load_dotenv
+from flasgger import Swagger
 from flask import Flask
 
 from shorty.error_handlers import error_handlers
@@ -28,6 +29,7 @@ def create_app(settings_overrides: Mapping[str, Any] | None = None) -> Flask:
     configure_logging(app)
     configure_blueprints(app)
     configure_error_handlers(app)
+    Swagger(app)
 
     return app
 

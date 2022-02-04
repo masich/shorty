@@ -1,6 +1,8 @@
+import pydantic
 import requests
 
 from shorty import utils
+from shorty.shortlink.shorteners import exceptions
 from shorty.shortlink.shorteners.request_based_shortener import RequestBasedShortener
 
 __all__ = (
@@ -32,4 +34,10 @@ class TinyurlShortener(RequestBasedShortener):
         )
 
     def short_link_from_response(self, response: requests.Response):
-        return response.content.decode()
+        try:
+            url = response.content.decode()
+            pydantic.parse_obj_as(pydantic.HttpUrl, url)
+        except Exception as e:
+            raise exceptions.InvalidShorteningProviderResponse from e
+
+        return url

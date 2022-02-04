@@ -1,14 +1,14 @@
 from typing import Iterable
 
 from flask import Response
-from werkzeug.exceptions import BadRequest
+from werkzeug.exceptions import UnprocessableEntity
 
 __all__ = (
     'APIValidationError',
 )
 
 
-class APIValidationError(BadRequest):
+class APIValidationError(UnprocessableEntity):
     """
     Custom API Exception to provide additional information about validation error.
     """

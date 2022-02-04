@@ -13,7 +13,7 @@ root = os.path.join(os.path.dirname(__file__))
 package = os.path.join(root, '..')
 sys.path.insert(0, os.path.abspath(package))
 
-from shorty.app import create_app  # noqa
+from shorty import app as app_module
 
 LONG_URL = 'https://long.com'
 SHORT_URL = 'https://short.com'
@@ -53,13 +53,9 @@ def humanize_werkzeug_client(client_method) -> Callable:
 
 
 @pytest.fixture(scope='session', autouse=True)
-def app(request) -> Flask:
-    app = create_app({
-        'TESTING': True,
-        'DEBUG': True,
-        'BITLY_URL': 'https://test.bitly/',
-        'TINYURL_URL': 'https://test.tinyurl/',
-    })
+def app(request, session_mocker) -> Flask:
+    session_mocker.patch.object(app_module, 'DOTENV_PATH', os.path.join(root, 'test.env'))
+    app = app_module.create_app()
 
     # Establish an application context before running the tests.
     ctx = app.app_context()

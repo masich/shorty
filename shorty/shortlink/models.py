@@ -10,8 +10,8 @@ __all__ = (
 
 
 class ShorteningProviderName(str, Enum):
-    BIT_LY = 'bit.ly'
-    TINYURL = 'tinyurl.com'
+    BITLY = 'bitly'
+    TINYURL = 'tinyurl'
 
 
 class ShortenersRequest(BaseModel):

@@ -1,5 +1,3 @@
-# Shortening providers config
-# Bitly config
 import os
 
 from flask import Config

@@ -1,6 +1,6 @@
 import requests
 
-from shorty.shortlink import utils
+from shorty import utils
 from shorty.shortlink.shorteners.request_based_shortener import RequestBasedShortener
 
 __all__ = (

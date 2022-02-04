@@ -1,6 +1,7 @@
 import logging
 from typing import Any, Mapping
 
+from dotenv import load_dotenv
 from flask import Flask
 
 from shorty.error_handlers import error_handlers
@@ -10,17 +11,19 @@ __all__ = (
     'create_app',
 )
 
-DEFAULT_CONFIG = 'config.py'
+DEFAULT_CONFIG = 'shorty.config.AppConfig'
+DOTENV_PATH = '.env'
 
 
-def create_app(settings_overrides: Mapping[str, Any] | None = None, import_name: str = __name__) -> Flask:
+def create_app(settings_overrides: Mapping[str, Any] | None = None) -> Flask:
     """
     Create and configure `Flask` application.
 
     :param: settings_overrides: Mapping to override `Flask` application config.
     :param: import_name: `Flask` application name.
     """
-    app = Flask(import_name)
+    load_dotenv(DOTENV_PATH)
+    app = Flask(__name__)
     configure_settings(app, settings_overrides=settings_overrides)
     configure_logging(app)
     configure_blueprints(app)
@@ -36,7 +39,7 @@ def configure_logging(app: Flask) -> None:
 
 
 def configure_settings(app: Flask, settings_overrides: Mapping[str, Any] | None) -> None:
-    app.config.from_pyfile(DEFAULT_CONFIG)
+    app.config.from_object(DEFAULT_CONFIG)
 
     if settings_overrides:
         app.config.update(settings_overrides)

@@ -35,7 +35,7 @@ class RequestBasedShortener(Shortener, ABC):
         pass
 
     @abstractmethod
-    def short_link_from_response(self, response: requests.Response):
+    def short_link_from_response(self, response: requests.Response) -> str:
         """
         Retrieve a short link from a given shortening provider `response`.
 
@@ -71,7 +71,6 @@ class RequestBasedShortener(Shortener, ABC):
 
         try:
             response.raise_for_status()
-        except requests.exceptions.HTTPError as e:
+            return self.short_link_from_response(response)
+        except Exception as e:
             raise exceptions.InvalidShorteningProviderResponse from e
-
-        return self.short_link_from_response(response)

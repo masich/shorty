@@ -48,7 +48,7 @@ class TestShortlinksAPI:
                 ShortlinksAPI.parse_request_json(json)
 
     def test_get_short_link_ok(self, short_url, mocked_shortener, long_url) -> None:
-        assert short_url == ShortlinksAPI.get_short_link(mocked_shortener, 'some_provider_name', long_url)
+        assert short_url == ShortlinksAPI.get_short_link(long_url, mocked_shortener)
 
     @pytest.mark.parametrize(
         'mocked_shortener,expected_exception',
@@ -60,7 +60,7 @@ class TestShortlinksAPI:
     )
     def test_get_short_link_ok(self, mocked_shortener, long_url, expected_exception) -> None:
         with pytest.raises(expected_exception):
-            ShortlinksAPI.get_short_link(mocked_shortener, 'some_provider_name', long_url)
+            ShortlinksAPI.get_short_link(long_url, mocked_shortener)
 
     @pytest.mark.parametrize(
         'provider_name,shortener_class',
@@ -70,7 +70,7 @@ class TestShortlinksAPI:
         )
     )
     def test_post_bitly(self, post, mocker: MockerFixture, provider_name, shortener_class, short_url, long_url):
-        bitly_shorten = mocker.patch.object(shortener_class, attribute='shorten', return_value=short_url)
+        shortener = mocker.patch.object(shortener_class, attribute='shorten', return_value=short_url)
         response = post(
             '/shortlinks',
             data={
@@ -82,4 +82,53 @@ class TestShortlinksAPI:
         assert 200 == response.status_code
         assert long_url == response.json['url']
         assert short_url == response.json['link']
-        bitly_shorten.assert_called_once_with(long_url)
+        shortener.assert_called_once_with(long_url)
+
+    def test_post_empty_provider_all(self, post, mocker: MockerFixture, short_url, long_url):
+        shorteners = (
+            mocker.patch.object(
+                BitlyShortener,
+                attribute='shorten',
+                side_effect=shortener_exceptions.ShortenerException,
+            ),
+            mocker.patch.object(TinyurlShortener, attribute='shorten', return_value=short_url),
+        )
+        response = post('/shortlinks', data={'url': long_url})
+
+        for shortener in shorteners:
+            shortener.assert_called_once_with(long_url)
+
+        assert 200 == response.status_code
+        assert long_url == response.json['url']
+        assert short_url == response.json['link']
+
+    def test_post_empty_provider_first(self, post, mocker: MockerFixture, short_url, long_url):
+        bitly_shortener = mocker.patch.object(BitlyShortener, attribute='shorten', return_value=short_url)
+        tinyurl_shortener = mocker.patch.object(TinyurlShortener, attribute='shorten', return_value=short_url)
+        response = post('/shortlinks', data={'url': long_url})
+
+        assert 200 == response.status_code
+        assert long_url == response.json['url']
+        assert short_url == response.json['link']
+        bitly_shortener.assert_called_once_with(long_url)
+        tinyurl_shortener.assert_not_called()
+
+    def test_post_empty_provider_all_invalid(self, post, mocker: MockerFixture, short_url, long_url):
+        shorteners = (
+            mocker.patch.object(
+                BitlyShortener,
+                attribute='shorten',
+                side_effect=shortener_exceptions.ShortenerException,
+            ),
+            mocker.patch.object(
+                TinyurlShortener,
+                attribute='shorten',
+                side_effect=shortener_exceptions.ShortenerException,
+            ),
+        )
+        response = post('/shortlinks', data={'url': long_url})
+
+        for shortener in shorteners:
+            shortener.assert_called_once_with(long_url)
+
+        assert 500 == response.status_code

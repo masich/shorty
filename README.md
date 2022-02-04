@@ -81,9 +81,9 @@ We will not use any of this code for any of Plum's applications.
 Running guide
 -------------
 
-1. Setup the next environment variables:
+1. Setup environment variables.
 
-| variable                              | type   | required | default                      | description                        |
+| variable name                         | type   | required | default                      | description                        |
 |---------------------------------------|--------|----------|------------------------------|------------------------------------|
 | BITLY_API_KEY                         | string | Y        |                              | Bitly service API key.             |
 | SHORTY_BITLY_GROUP_GUID               | string | Y        |                              | Bitly group GUID for shortening.   |

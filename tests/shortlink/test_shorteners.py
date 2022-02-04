@@ -8,7 +8,7 @@ from shorty.shortlink.shorteners import BitlyShortener, TinyurlShortener, except
 from tests.conftest import LONG_URL
 
 
-class TestResponse(requests.Response):
+class DummyResponse(requests.Response):
     def __init__(self, status_code: int | None = None, content: bytes | None = None, json: dict | None = None):
         super().__init__()
         self.status_code = status_code
@@ -21,7 +21,7 @@ class TestResponse(requests.Response):
 
 @pytest.fixture
 def empty_response() -> requests.Response:
-    return TestResponse(status_code=200)
+    return DummyResponse(status_code=200)
 
 
 class TestBitLyShortener:
@@ -35,7 +35,7 @@ class TestBitLyShortener:
 
     @pytest.fixture
     def response(self, short_url) -> requests.Response:
-        return TestResponse(
+        return DummyResponse(
             status_code=200,
             json={'link': short_url},
         )
@@ -88,7 +88,7 @@ class TestBitLyShortener:
         mock_make_request = mocker.patch.object(
             shortener,
             attribute='make_shorten_request',
-            return_value=TestResponse(status_code=status_code, json={'link': short_url}),
+            return_value=DummyResponse(status_code=status_code, json={'link': short_url}),
         )
 
         if 200 <= status_code < 400:
@@ -112,7 +112,7 @@ class TestTinyurlShortener:
 
     @pytest.fixture(params=(200,))
     def response(self, request, short_url) -> requests.Response:
-        return TestResponse(
+        return DummyResponse(
             status_code=request.param,
             content=short_url.encode(),
         )
@@ -145,7 +145,8 @@ class TestTinyurlShortener:
         (200, 201, 202, 300, 301, 302, 400, 401, 500),
         indirect=True,
     )
-    def test_shorten(self, mocker: MockerFixture, response: TestResponse, shortener, request_data, long_url, short_url):
+    def test_shorten(self, mocker: MockerFixture, response: DummyResponse, shortener, request_data, long_url,
+                     short_url):
         mock_prepare_request_data = mocker.patch.object(
             shortener,
             attribute='prepare_request_data',

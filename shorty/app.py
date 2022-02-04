@@ -17,8 +17,8 @@ def create_app(settings_overrides: Mapping[str, Any] | None = None, import_name:
     """
     Create and configure `Flask` application.
 
-    :param settings_overrides: Mapping to override `Flask` application config.
-    :param import_name: `Flask` application name.
+    :param: settings_overrides: Mapping to override `Flask` application config.
+    :param: import_name: `Flask` application name.
     """
     app = Flask(import_name)
     configure_settings(app, settings_overrides=settings_overrides)

@@ -6,7 +6,6 @@ from typing import Callable
 
 import pytest
 from flask import Flask
-
 # Set up the path to import from `shorty`.
 from flask.testing import FlaskClient
 
@@ -15,6 +14,9 @@ package = os.path.join(root, '..')
 sys.path.insert(0, os.path.abspath(package))
 
 from shorty.app import create_app  # noqa
+
+LONG_URL = 'https://long.com'
+SHORT_URL = 'https://short.com'
 
 
 class TestResponseClass(Flask.response_class):
@@ -53,7 +55,10 @@ def humanize_werkzeug_client(client_method) -> Callable:
 @pytest.fixture(scope='session', autouse=True)
 def app(request) -> Flask:
     app = create_app({
-        'TESTING': True
+        'TESTING': True,
+        'DEBUG': True,
+        'BITLY_URL': 'https://test.bitly/',
+        'TINYURL_URL': 'https://test.tinyurl/',
     })
 
     # Establish an application context before running the tests.
@@ -65,11 +70,26 @@ def app(request) -> Flask:
     return app
 
 
-@pytest.fixture(scope='function')
-def client(app, request) -> FlaskClient:
+@pytest.fixture
+def client(app) -> FlaskClient:
     return app.test_client()
 
 
 @pytest.fixture
 def get(client):
     return humanize_werkzeug_client(client.get)
+
+
+@pytest.fixture
+def post(client):
+    return humanize_werkzeug_client(client.post)
+
+
+@pytest.fixture
+def long_url() -> str:
+    return LONG_URL
+
+
+@pytest.fixture
+def short_url() -> str:
+    return SHORT_URL

@@ -118,5 +118,8 @@ default.
 
 4. Enjoy shortening!
 
+Running guide
+-------------
 
+You can access Swagger documentation for Shorty by going to the `apidocs/` endpoint.
     

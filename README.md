@@ -89,26 +89,26 @@ pip install -r requirements.txt
 
 2. Setup environment variables.
 
-| variable name                         | type   | required | default                      | description                        |
-|---------------------------------------|--------|----------|------------------------------|------------------------------------|
-| SHORTY_BITLY_API_KEY                  | string | Y        |                              | Bitly service API key.             |
-| SHORTY_BITLY_GROUP_GUID               | string | Y        |                              | Bitly group GUID for shortening.   |
-| SHORTY_BITLY_URL                      | string | N        | https://api-ssl.bitly.com/v4 | Bitly service base URL.            |
-| SHORTY_BITLY_REQUEST_TIMEOUT_SECONDS  | string | N        | 1.0                          | Bitly service request timeout.     |
-| SHORTY_TINYURL_URL                    | string | N        | https://tinyurl.com          | Tinyurl base url.                  |
-| SHORTY_TINYURL_REQUST_TIMEOUT_SECONDS | string | N        | 1.0                          | Tinyurl request timeout.           |
-| SHORTY_DEBUG                          | string | N        | True                         | Run Shorty in debug mode or not.   |
-| SHORTY_TESTING                        | string | N        | False                        | Run Shorty in testing mode or not. |
-| SHORTY_LOGGING_LEVEL                  | string | N        | DEBUG                        | Shorty service logging level.      |
-| SHORTY_DEFAULT_HOST                   | string | N        | 0.0.0.0                      | Default Shorty service host.       |
-| SHORTY_DEFAULT_PORT                   | string | N        | 8080                         | Default Shorty service port.       |
+| variable name                            | type   | required | default                      | description                        |
+|------------------------------------------|--------|----------|------------------------------|------------------------------------|
+| SHORTY_BITLY_API_KEY                     | string | Y        |                              | Bitly service API key.             |
+| SHORTY_BITLY_GROUP_GUID                  | string | Y        |                              | Bitly group GUID for shortening.   |
+| SHORTY_BITLY_URL                         | string | N        | https://api-ssl.bitly.com/v4 | Bitly service base URL.            |
+| SHORTY_BITLY_REQUEST_TIMEOUT_SECONDS     | string | N        | 1.0                          | Bitly service request timeout.     |
+| SHORTY_TINYURL_URL                       | string | N        | https://tinyurl.com          | Tinyurl base url.                  |
+| SHORTY_TINYURL_REQUEST_TIMEOUT_SECONDS   | string | N        | 1.0                          | Tinyurl request timeout.           |
+| SHORTY_DEBUG                             | string | N        | True                         | Run Shorty in debug mode or not.   |
+| SHORTY_TESTING                           | string | N        | False                        | Run Shorty in testing mode or not. |
+| SHORTY_LOGGING_LEVEL                     | string | N        | DEBUG                        | Shorty service logging level.      |
+| SHORTY_DEFAULT_HOST                      | string | N        | 0.0.0.0                      | Default Shorty service host.       |
+| SHORTY_DEFAULT_PORT                      | string | N        | 8080                         | Default Shorty service port.       |
 
 2. Optional. For testing purposes you can create the `.env` file with the following content in the project's root
    directory.
 
 ```dotenv
-SHORTY_BITLY_URL='https://mockbin.org/bin/383dbfe8-947f-4020-ba72-0a7366e95fbe'
-SHORTY_TINYURL_URL='https://mockbin.org/bin/f011a7bc-3544-4eb7-a185-4b2ef6b99e33'
+SHORTY_BITLY_URL='https://mockbin.org/bin/383dbfe8-947f-4020-ba72-0a7366e95fbe'  # mocked bitly endpoint
+SHORTY_TINYURL_URL='https://mockbin.org/bin/f011a7bc-3544-4eb7-a185-4b2ef6b99e33'  # mocked tinyurl endpoint
 SHORTY_BITLY_API_KEY='some_api_key'
 SHORTY_BITLY_GROUP_GUID='some_group_id'
 ```

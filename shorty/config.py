@@ -13,7 +13,7 @@ class AppConfig(Config):
 
     # Tinyurl config
     TINYURL_URL = os.getenv('SHORTY_TINYURL_URL', 'https://tinyurl.com')
-    TINYURL_REQUST_TIMEOUT_SECONDS = get_env('SHORTY_TINYURL_REQUST_TIMEOUT_SECONDS', 1.0, converter=float)
+    TINYURL_REQUEST_TIMEOUT_SECONDS = get_env('SHORTY_TINYURL_REQUEST_TIMEOUT_SECONDS', 1.0, converter=float)
 
     # App config
     DEBUG = get_env('SHORTY_DEBUG', True, converter=bool)

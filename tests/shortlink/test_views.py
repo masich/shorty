@@ -6,7 +6,7 @@ from pytest_mock import MockerFixture
 from werkzeug import exceptions as flask_exceptions
 
 from shorty.shortlink.exceptions import APIValidationError
-from shorty.shortlink.models import ShortenersRequest, ShorteningProviderName
+from shorty.shortlink.schemas import ShortenersRequest, ShorteningProviderName
 from shorty.shortlink.shorteners import BitlyShortener, TinyurlShortener, exceptions as shortener_exceptions
 from shorty.shortlink.views import ShortlinksAPI
 from tests.conftest import SHORT_URL

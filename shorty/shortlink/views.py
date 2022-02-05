@@ -9,7 +9,7 @@ from werkzeug import exceptions as flask_exceptions
 
 from shorty.shortlink import shorteners
 from shorty.shortlink.exceptions import APIValidationError
-from shorty.shortlink.models import ShorteningProviderName, ShortenersRequest, ShortenersResponse
+from shorty.shortlink.schemas import ShorteningProviderName, ShortenersRequest, ShortenersResponse
 from shorty.shortlink.shorteners import exceptions as shortener_exceptions
 
 __all__ = (

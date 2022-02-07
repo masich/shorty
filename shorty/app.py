@@ -20,8 +20,7 @@ def create_app(settings_overrides: Mapping[str, Any] | None = None) -> Flask:
     """
     Create and configure `Flask` application.
 
-    :param: settings_overrides: Mapping to override `Flask` application config.
-    :param: import_name: `Flask` application name.
+    :param settings_overrides: Mapping to override `Flask` application config.
     """
     load_dotenv(DOTENV_PATH)
     app = Flask(__name__)

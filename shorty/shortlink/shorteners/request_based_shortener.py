@@ -19,7 +19,7 @@ class RequestBasedShortener(Shortener, ABC):
         """
         Prepare request data for future shortening provider request.
 
-        :param: long_url: Long url to shorten.
+        :param long_url: Long url to shorten.
         :return: Data that will be used to make shortening provider request.
         """
         pass
@@ -29,7 +29,7 @@ class RequestBasedShortener(Shortener, ABC):
         """
         Request shortening provider using a given `request_data` and return its response.
 
-        :param: request_data: Data to make shortening provider request.
+        :param request_data: Data to make shortening provider request.
         :return: Shortening provider response.
         """
         pass
@@ -39,7 +39,7 @@ class RequestBasedShortener(Shortener, ABC):
         """
         Retrieve a short link from a given shortening provider `response`.
 
-        :param: response: Shortening provider response.
+        :param response: Shortening provider response.
         :return: Short url.
         """
         pass
@@ -48,7 +48,7 @@ class RequestBasedShortener(Shortener, ABC):
         """
         Shorten a given `long_url` using a specific shortening provider.
 
-        :param: long_url: Long url to shorten.
+        :param long_url: Long url to shorten.
         :raises: exceptions.CouldNotReachShorteningProvider: If provider could not be reached during request.
         :raises: exceptions.ShorteningProviderTimeout: If timeout error occurred during shortening provider request.
         :raises: exceptions.ShorteningProviderRequestException: If some other error occurred during request.

@@ -16,11 +16,11 @@ class BitlyShortener(RequestBasedShortener):
         """
         Initialize `BitLyShortener`.
 
-        :param: provider_url: Bitly provider base url. For example: 'https://bit.ly'
-        :param: api_key: Bitly API key.
-        :param: domain: Bitly domain. See https://dev.bitly.com/api-reference#shortenlink for details.
-        :param: group_guid: Bitly group GUID. See https://dev.bitly.com/api-reference#shortenlink for details.
-        :param: timeout: Timeout to reach Bitly API. See `requests.request` for details.
+        :param provider_url: Bitly provider base url. For example: 'https://bit.ly'
+        :param api_key: Bitly API key.
+        :param domain: Bitly domain. See https://dev.bitly.com/api-reference#shortenlink for details.
+        :param group_guid: Bitly group GUID. See https://dev.bitly.com/api-reference#shortenlink for details.
+        :param timeout: Timeout to reach Bitly API. See `requests.request` for details.
         """
         self._provider_url = provider_url
         self._domain = domain

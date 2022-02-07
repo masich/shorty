@@ -2,14 +2,12 @@ from typing import Type
 from unittest.mock import Mock
 
 import pytest
-from pytest_mock import MockerFixture
 from werkzeug import exceptions as flask_exceptions
 
 from shorty.shortlink.exceptions import APIValidationError
-from shorty.shortlink.schemas import ShortenersRequest, ShorteningProviderName
 from shorty.shortlink.shorteners import BitlyShortener, TinyurlShortener, exceptions as shortener_exceptions
 from shorty.shortlink.views import ShortlinksAPI
-from tests.conftest import SHORT_URL
+from tests.conftest import ShorteningProviderName, SHORT_URL
 
 
 @pytest.fixture(params=[Mock(return_value=SHORT_URL)])
@@ -21,31 +19,27 @@ def mocked_shortener(request):
 
 class TestShortlinksAPI:
     @pytest.mark.parametrize(
-        'json,expected',
+        'json',
         (
-            (
-                {'url': 'https://test.com', 'provider': 'tinyurl'},
-                ShortenersRequest(url='https://test.com', provider='tinyurl'),
-            ),
-            (
-                {'url': 'http://test.com:8080/some/path#fragment', 'provider': 'tinyurl'},
-                ShortenersRequest(url='http://test.com:8080/some/path#fragment', provider='tinyurl'),
-            ),
-            (
-                {'url': 'https://test.com', 'provider': 'bitly'},
-                ShortenersRequest(url='https://test.com', provider='bitly'),
-            ),
+            {'url': 'https://test.com', 'provider': 'tinyurl'},
+            {'url': 'http://test.com:8080/some/path#fragment', 'provider': 'tinyurl'},
+            {'url': 'https://test.com', 'provider': 'bitly'},
+        )
+    )
+    def test_parse_request_json_ok(self, json: dict) -> None:
+        assert ShortlinksAPI.parse_request_json(json)
+
+    @pytest.mark.parametrize(
+        'json,expected_exception',
+        (
             ({'url': 'https://test.com', 'provider': 'invalid_provider_name'}, APIValidationError),
             ({'url': 'htts://test.com', 'provider': 'bitly'}, APIValidationError),
             ({'url': 'testcom', 'provider': 'bitly'}, APIValidationError),
         )
     )
-    def test_parse_request_json(self, json: dict, expected: ShortenersRequest | Type[APIValidationError]) -> None:
-        if isinstance(expected, ShortenersRequest):
-            assert ShortlinksAPI.parse_request_json(json) == expected
-        else:
-            with pytest.raises(APIValidationError):
-                ShortlinksAPI.parse_request_json(json)
+    def test_parse_request_json_invalid(self, json: dict, expected_exception: Type[Exception]) -> None:
+        with pytest.raises(expected_exception):
+            ShortlinksAPI.parse_request_json(json)
 
     def test_get_short_link_ok(self, short_url, mocked_shortener, long_url) -> None:
         assert short_url == ShortlinksAPI.get_short_link(long_url, mocked_shortener)
@@ -63,19 +57,19 @@ class TestShortlinksAPI:
             ShortlinksAPI.get_short_link(long_url, mocked_shortener)
 
     @pytest.mark.parametrize(
-        'provider_name,shortener_class',
+        'provider,shortener_class',
         (
             (ShorteningProviderName.BITLY, BitlyShortener),
             (ShorteningProviderName.TINYURL, TinyurlShortener),
         )
     )
-    def test_post_bitly(self, post, mocker: MockerFixture, provider_name, shortener_class, short_url, long_url):
+    def test_post_bitly(self, post, mocker, provider, shortener_class, short_url, long_url, mock_allowed_providers):
         shortener = mocker.patch.object(shortener_class, attribute='shorten', return_value=short_url)
         response = post(
             '/shortlinks',
             data={
                 'url': long_url,
-                'provider': provider_name,
+                'provider': provider,
             }
         )
 
@@ -84,7 +78,7 @@ class TestShortlinksAPI:
         assert short_url == response.json['link']
         shortener.assert_called_once_with(long_url)
 
-    def test_post_empty_provider_all(self, post, mocker: MockerFixture, short_url, long_url):
+    def test_post_empty_provider_all(self, post, mocker, short_url, long_url, mock_allowed_providers):
         shorteners = (
             mocker.patch.object(
                 BitlyShortener,
@@ -102,7 +96,7 @@ class TestShortlinksAPI:
         assert long_url == response.json['url']
         assert short_url == response.json['link']
 
-    def test_post_empty_provider_first(self, post, mocker: MockerFixture, short_url, long_url):
+    def test_post_empty_provider_first(self, post, mocker, short_url, long_url, mock_allowed_providers):
         bitly_shortener = mocker.patch.object(BitlyShortener, attribute='shorten', return_value=short_url)
         tinyurl_shortener = mocker.patch.object(TinyurlShortener, attribute='shorten', return_value=short_url)
         response = post('/shortlinks', data={'url': long_url})
@@ -113,7 +107,7 @@ class TestShortlinksAPI:
         bitly_shortener.assert_called_once_with(long_url)
         tinyurl_shortener.assert_not_called()
 
-    def test_post_empty_provider_all_invalid(self, post, mocker: MockerFixture, short_url, long_url):
+    def test_post_empty_provider_all_invalid(self, post, mocker, short_url, long_url, mock_allowed_providers):
         shorteners = (
             mocker.patch.object(
                 BitlyShortener,

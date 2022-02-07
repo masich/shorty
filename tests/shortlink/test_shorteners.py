@@ -43,19 +43,19 @@ class TestBitLyShortener:
     @pytest.mark.parametrize(
         'shortener,expected',
         (
-                (('https://bit.ly', 'api_key'), {'long_url': LONG_URL}),
-                (
-                        ('https://bit.ly', 'api_key', 'some_domain'),
-                        {'long_url': LONG_URL, 'domain': 'some_domain'},
-                ),
-                (
-                        ('https://bit.ly', 'api_key', 'some_domain', 'some_guid'),
-                        {'long_url': LONG_URL, 'domain': 'some_domain', 'group_guid': 'some_guid'},
-                ),
-                (
-                        ('https://bit.ly', 'api_key', 'some_domain', 'some_guid', 1),
-                        {'long_url': LONG_URL, 'domain': 'some_domain', 'group_guid': 'some_guid'},
-                ),
+            (('https://bit.ly', 'api_key'), {'long_url': LONG_URL}),
+            (
+                ('https://bit.ly', 'api_key', 'some_domain'),
+                {'long_url': LONG_URL, 'domain': 'some_domain'},
+            ),
+            (
+                ('https://bit.ly', 'api_key', 'some_domain', 'some_guid'),
+                {'long_url': LONG_URL, 'domain': 'some_domain', 'group_guid': 'some_guid'},
+            ),
+            (
+                ('https://bit.ly', 'api_key', 'some_domain', 'some_guid', 1),
+                {'long_url': LONG_URL, 'domain': 'some_domain', 'group_guid': 'some_guid'},
+            ),
         ),
         indirect=('shortener',),
     )
@@ -120,8 +120,8 @@ class TestTinyurlShortener:
     @pytest.mark.parametrize(
         'shortener,expected',
         (
-                (('https://bit.ly',), {'url': LONG_URL}),
-                (('https://bit.ly', 1), {'url': LONG_URL}),
+            (('https://bit.ly',), {'url': LONG_URL}),
+            (('https://bit.ly', 1), {'url': LONG_URL}),
         ),
         indirect=('shortener',)
     )

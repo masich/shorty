@@ -28,7 +28,7 @@ def generic_error_handler(exception: Exception) -> tuple[Response, int]:
     """
     Error handler for generic Exceptions.
 
-    :param: exception: Exception to handle.
+    :param exception: Exception to handle.
     :return: Response and HTTP status code.
     """
     logger.exception(exception)

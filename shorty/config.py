@@ -1,19 +1,30 @@
-import os
-
 from flask import Config
 
 from shorty.utils import get_env
 
+DEFAULT_TIMEOUT_SECONDS = 1.0
+
 
 class AppConfig(Config):
-    BITLY_URL = get_env('SHORTY_BITLY_URL', default='https://api-ssl.bitly.com/v4')
-    BITLY_API_KEY = get_env('SHORTY_BITLY_API_KEY')
-    BITLY_GROUP_GUID = get_env('SHORTY_BITLY_GROUP_GUID')
-    BITLY_REQUEST_TIMEOUT_SECONDS = get_env('SHORTY_BITLY_REQUEST_TIMEOUT_SECONDS', 1.0, converter=float)
-
-    # Tinyurl config
-    TINYURL_URL = os.getenv('SHORTY_TINYURL_URL', 'https://tinyurl.com')
-    TINYURL_REQUEST_TIMEOUT_SECONDS = get_env('SHORTY_TINYURL_REQUEST_TIMEOUT_SECONDS', 1.0, converter=float)
+    SHORTENERS = {
+        'bitly': {
+            'class_path': 'shorty.shortlink.shorteners.bitly_shortener.BitlyShortener',
+            'kwargs': {
+                'provider_url': get_env('SHORTY_BITLY_URL', 'https://api-ssl.bitly.com/v4'),
+                'api_key': get_env('SHORTY_BITLY_API_KEY'),
+                'domain': get_env('SHORTY_BITLY_DOMAIN', None),
+                'group_guid': get_env('SHORTY_BITLY_GROUP_GUID'),
+                'timeout': get_env('SHORTY_BITLY_REQUEST_TIMEOUT_SECONDS', DEFAULT_TIMEOUT_SECONDS, converter=float),
+            }
+        },
+        'tinyurl': {
+            'class_path': 'shorty.shortlink.shorteners.tinyurl_shortener.TinyurlShortener',
+            'kwargs': {
+                'provider_url': get_env('SHORTY_TINYURL_URL', 'https://tinyurl.com'),
+                'timeout': get_env('SHORTY_TINYURL_REQUEST_TIMEOUT_SECONDS', DEFAULT_TIMEOUT_SECONDS, converter=float),
+            }
+        }
+    }
 
     # App config
     DEBUG = get_env('SHORTY_DEBUG', True, converter=bool)

@@ -12,7 +12,7 @@ class Shortener(ABC):
         Shorten a given `long_url`.
 
         :raises: shorty.shortlink.shorteners.exceptions.ShortenerException: If error occurred during shortening.
-        :param: long_url: Long url to shorten.
+        :param long_url: Long url to shorten.
         :return: Short url pointing to a given `long_url`.
         """
         pass

@@ -6,6 +6,20 @@ from pytest_mock import MockerFixture
 from shorty import utils
 
 
+class DummyClass:
+    pass
+
+
+@pytest.fixture
+def dummy_class_path() -> str:
+    return f'{__name__}.{DummyClass.__name__}'
+
+
+@pytest.fixture
+def invalid_class_path() -> str:
+    return f'{__name__}.InvalidClass'
+
+
 @pytest.mark.parametrize(
     'base,url,expected',
     (
@@ -37,8 +51,9 @@ def test_get_env_ok(env_name, converter, environ, expected, mocker: MockerFixtur
 @pytest.mark.parametrize(
     'env_name,default,environ,expected',
     (
-        ('SOME_VAR', 'some_value', {}, 'some_value'),
-        ('SOME_VAR', 'some_value', {'SOME_VAR_2': '12'}, 'some_value'),
+            ('SOME_VAR', 'some_value', {}, 'some_value'),
+            ('SOME_VAR', 'some_value', {'SOME_VAR_2': '12'}, 'some_value'),
+            ('SOME_VAR', None, {'SOME_VAR_2': '12'}, None),
     )
 )
 def test_get_env_default(env_name, default, environ, expected, mocker: MockerFixture) -> None:
@@ -58,3 +73,12 @@ def test_get_env_error(env_name, converter, environ, exception, mocker: MockerFi
     mocker.patch.object(os, attribute='environ', new=environ)
     with pytest.raises(exception):
         utils.get_env(env_name, converter=converter)
+
+
+def test_dynamically_load_shortener(dummy_class_path) -> None:
+    assert utils.dynamically_load(dummy_class_path) == DummyClass
+
+
+def test_dynamically_load_shortener_fail(invalid_class_path) -> None:
+    with pytest.raises(Exception):
+        assert utils.dynamically_load(invalid_class_path)

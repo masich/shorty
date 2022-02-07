@@ -17,8 +17,8 @@ class TinyurlShortener(RequestBasedShortener):
         """
         Initialize `TinyUrlShortener`.
 
-        :param: provider_url: Tinyurl provider base url. For example: 'https://tinyurl.com'
-        :param: timeout: Timeout to reach Tinyurl API. See `requests.request` for details.
+        :param provider_url: Tinyurl provider base url. For example: 'https://tinyurl.com'
+        :param timeout: Timeout to reach Tinyurl API. See `requests.request` for details.
         """
         self._provider_url = provider_url
         self._timeout = timeout

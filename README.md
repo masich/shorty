@@ -94,7 +94,7 @@ pip install -r requirements.txt
 | SHORTY_BITLY_API_KEY                   | string | Y        |                              | Bitly service API key.                |
 | SHORTY_BITLY_GROUP_GUID                | string | Y        |                              | Bitly group GUID for shortening.      |
 | SHORTY_BITLY_URL                       | string | N        | https://api-ssl.bitly.com/v4 | Bitly service base URL.               |
-| SHORTY_BITLY_DOMAIN                    | string | N        | None                         | Nitly domain for shortening base URL. |
+| SHORTY_BITLY_DOMAIN                    | string | N        | None                         | Bitly domain for shortening base URL. |
 | SHORTY_BITLY_REQUEST_TIMEOUT_SECONDS   | string | N        | 1.0                          | Bitly service request timeout.        |
 | SHORTY_TINYURL_URL                     | string | N        | https://tinyurl.com          | Tinyurl base url.                     |
 | SHORTY_TINYURL_REQUEST_TIMEOUT_SECONDS | string | N        | 1.0                          | Tinyurl request timeout.              |

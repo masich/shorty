@@ -1,0 +1,87 @@
+summary: "The endpoint to shorten long URLs. Supports two shortening providers: `bitly` and `tinyurl`."
+parameters:
+  - in: body
+    name: url
+    description: URL to shorten.
+    type: string
+    required: true
+    example: "https://example.com"
+  - in: body
+    name: provider
+    description: "Shortening provider to use for shortening. If the `provider` is null, then the service will
+                  try to shorten a given URL using any available shortening provider starting from `bitly."
+    type: string
+    enum: [ 'bitly', 'tinyurl' ]
+    example: "bitly"
+definitions:
+  Response:
+    type: object
+    properties:
+      url:
+        description: Original long url.
+        type: string
+      link:
+        description: Shortened url.
+        type: string
+  ErrorResponse:
+    type: object
+    properties:
+      name:
+        description: Error name.
+        type: string
+      description:
+        description: Error description.
+        type: string
+  ValidationError:
+    type: object
+    properties:
+      loc:
+        description: Invalid value location info.
+        type: array
+        items:
+          type: string
+      msg:
+        description: Validation message.
+        type: string
+      type:
+        description: Validation error type.
+        type: string
+  ValidationErrorResponse:
+    type: object
+    properties:
+      name:
+        description: Error name.
+        type: string
+      description:
+        description: Error description.
+        type: string
+      errors:
+        description: Errors list.
+        type: array
+        items:
+          $ref: '#/definitions/ValidationError'
+responses:
+  200:
+    description: Response with shortened url.
+    schema:
+      $ref: '#/definitions/Response'
+  400:
+    description: Bad request.
+    schema:
+      $ref: '#/definitions/ErrorResponse'
+  422:
+    description: Invalid/unprocessable data received.
+    schema:
+      $ref: '#/definitions/ValidationErrorResponse'
+  500:
+    description: Internal server error.
+    schema:
+      $ref: '#/definitions/ErrorResponse'
+  502:
+    description: Requested shortening provider returned invalid response.
+    schema:
+      $ref: '#/definitions/ErrorResponse'
+  504:
+    description: A timeout error occurred while connecting to the requested shortening provider.
+    schema:
+      $ref: '#/definitions/ErrorResponse'

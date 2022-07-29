@@ -10,7 +10,7 @@ itsdangerous==2.0.1
 Jinja2==3.0.3
 jsonschema==4.4.0
 MarkupSafe==2.0.1
-mistune==2.0.2
+mistune==2.0.3
 packaging==21.3
 pluggy==1.0.0
 py==1.11.0

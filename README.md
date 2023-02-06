@@ -1,5 +1,5 @@
 # Shorty
-Shorty is a simple URL-shortening microservice that supports two shortening providers: bit.ly and tinyurl.com. It's easy to use and extendable: if you want to add a new provider, you only have to implement [shortener interface](https://github.com/masich/shorty/blob/master/shorty/shortlink/shorteners/shortener.py) and change the [configuration file](https://github.com/masich/shorty/blob/master/shorty/config.py).
+Shorty is a simple URL shortening microservice that supports two shortening providers: bit.ly and tinyurl.com. It's easy to use and extendable: if you want to add a new provider, you only have to implement [shortener interface](https://github.com/masich/shorty/blob/master/shorty/shortlink/shorteners/shortener.py) and change the [configuration file](https://github.com/masich/shorty/blob/master/shorty/config.py).
 
 It has an endpoint: `POST /shortlinks`, which can be used for shortening purposes. This endpoint accepts JSON with the following schema:
 
@@ -28,6 +28,8 @@ For example:
 
 Also, it returns a JSON response with a sensible HTTP status in case of
 errors or failures.
+
+> Test coverage is 97%.
 
 Running guide
 -------------

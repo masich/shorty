@@ -25,5 +25,5 @@ requests==2.31.0
 six==1.16.0
 toml==0.10.2
 typing_extensions==4.0.1
-urllib3==1.26.8
+urllib3==1.26.18
 Werkzeug==2.2.3
